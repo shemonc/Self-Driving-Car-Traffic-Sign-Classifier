@@ -25,6 +25,7 @@ The goals / steps of this project are the following:
 [image6]: ./examples/stop.png "Traffic Sign Stop"
 [image7]: ./examples/slippery_road.png "Traffic Sign Slippery road"
 [image8]: ./examples/ahead_only.png "Traffic Sign Ahead Only"
+[image9]: ./examples/feature_map.png "Feature Map"
 
 ## Rubric Points
 ###Here I will consider the [rubric points](https://review.udacity.com/#!/rubrics/481/view) individually and describe how I addressed each point in my implementation.  
@@ -71,6 +72,7 @@ Normalizing the data to the range (-1,1) , This was done using the equation X_tr
 of my Train, Valid and Test data before and after normalization. After normalization they mean very close to zero and variance are equal to each other.
 
 == Data before Normalization ==
+
 Train Data  82.677589037
 Valid Data  83.5564273756
 Test Data  82.1484603612
@@ -79,6 +81,7 @@ Train Variance [128-255]  4655.41963214
 Train Variance [256-384]  4591.37094437
 
 == Data after Normalization ==
+
 Train Data  -1.31869359324e-19
 Valid Data  -2.349678359e-19
 Test Data  -4.02012665554e-18
@@ -86,7 +89,7 @@ Train Variance [0-127]  0.880446952967
 Train Variance [128-255]  1.00922009169
 Train Variance [256-384]  0.992372176702
 
-As seen above data are very close zero mean and equal variance which is a good starting point for optimizing the loss to avoid too big or too small. A badly condition problem means that the optimizer has to do a lot of searching to go and find a good solution.
+As seen above data are very close to zero mean and equal variance which is a good starting point for optimizing the loss to avoid too big or too small. A badly condition problem means that the optimizer has to do a lot of searching to go and find a good solution.
 
 
 ![alt text][image2]
@@ -95,7 +98,7 @@ I decided to generate additional data because,
 
 Some of the classes were represented far more than others sometime 10 fold higher. This is a problem because the lack of balance in the class data will lead into become biased toward the classes with more data points. Instead of omitting valid data from the classes with more datapoints I generate more data for the classes those are less than 500 by using a Gaussian bluring of the real image with a kernel size of 3, 5 etc.
 
-Here is an example of an original image and an augmented image:
+Here is an example of original images and  augmented images:
 
 ![alt text][image3]
 
@@ -144,13 +147,15 @@ Learning rate of rate = 0.001
 * During training target is to minimize the training loss which is a function of weights and biases. Initializing the weights with random numbers from a normal distribution is good 
   practice and is done here. Randomizing the weights helps the model from becoming stuck in the same place every time it is trained. Similarly, choosing weights from a normal 
   distribution prevents any one weight from overwhelming other weights. following tensorflow truncated_normal() function was used to select the weight.
+
   mu = 0
   sigma = 0.1
   conv1_W = tf.Variable(tf.truncated_normal(shape=(5, 5, 1, 6), mean = mu, stddev = sigma))
+
   for numerical stability and better optimization training/validating/testing data was normalized. Also I picked a low sigma value above which means small peak, less opinionistic that
   can train better
 * Also use Adam Optimizer over SGD.
-* Use Dropout (50%) for regularization to force the network to lean and avoid overfitting
+* Use Dropout (50%) for regularization to force the network to learn and avoid overfitting
 
 
 ####4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
@@ -210,7 +215,7 @@ The model was able to correctly guess 6 of the 6 traffic signs in above table, w
 
 The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top six soft max probabilities were
+Here is the Probability and Prediction of the model
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
@@ -227,6 +232,8 @@ with not so clear image like those given in this experiment the model accuracy m
 
 ### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
 ####1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+
+![alt text][image9]
 
 Feature maps are show for class_id 38 (keep right) with 6 images.
 In LeNet-5 model, Units in a Feature map are all constrained to perform the same operation on different parts of the image. As is shown in this experiment, the first layer of LeNet-5 are organized in
